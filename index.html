@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CAF OTC AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101827;color:white;font-family:Arial;padding:18px}
+h2{color:#55d6a0} .card{background:#1d293b;padding:16px;border-radius:14px;margin:12px 0}
+button{padding:13px;border:0;border-radius:9px;background:#277c59;color:white;font-weight:bold;width:100%;margin-top:10px}
+input{width:100%;padding:12px;border-radius:8px;margin:8px 0}
+.green{color:#55d6a0}.red{color:#ff7777}.muted{color:#aab6c8}
+</style>
+</head>
+<body>
+<h2>CAF OTC AI Dashboard</h2>
+<div class="card"><b>ASSET: USDJPY OTC</b><p class="muted">Timeframe: 1 Minute</p></div>
+<div class="card">
+<label>Last 14 RSI value (0-100)</label>
+<input id="rsi" type="number" min="0" max="100" value="50">
+<label>EMA 9</label><input id="ema9" type="number" step="any" value="150.10">
+<label>EMA 21</label><input id="ema21" type="number" step="any" value="150.00">
+<label>Recent candle</label>
+<select id="candle" style="width:100%;padding:12px">
+<option value="none">No clear pattern</option>
+<option value="bull">Bullish engulfing / Hammer</option>
+<option value="bear">Bearish engulfing / Shooting star</option>
+</select>
+<button onclick="analyze()">ANALYZE</button>
+</div>
+<div class="card"><h3 id="signal">WAIT / NO TRADE</h3><p id="reason">Enter observed chart values, then analyze.</p><p class="muted">Manual input only • Not live market data</p></div>
+<script>
+function analyze(){
+let r=Number(document.getElementById('rsi').value);
+let a=Number(document.getElementById('ema9').value);
+let b=Number(document.getElementById('ema21').value);
+let c=document.getElementById('candle').value;
+let s='WAIT / NO TRADE',reason='Signals are mixed or incomplete.';
+if(!Number.isFinite(r)||r<0||r>100||!Number.isFinite(a)||!Number.isFinite(b)){alert('Enter valid values');return}
+if(a>b&&r>50&&c==='bull'){s='POSSIBLE UP';reason='EMA9 above EMA21, RSI above 50 and bullish pattern.'}
+else if(a<b&&r<50&&c==='bear'){s='POSSIBLE DOWN';reason='EMA9 below EMA21, RSI below 50 and bearish pattern.'}
+document.getElementById('signal').textContent=s;
+document.getElementById('reason').textContent=reason;
+}
+</script>
+</body>
+</html>
